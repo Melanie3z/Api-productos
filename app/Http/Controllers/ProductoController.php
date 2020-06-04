@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Producto;
+use App\Model\Categoria;
 use Config;
 
 
@@ -19,10 +20,12 @@ class ProductoController extends Controller
             $productos = Producto::select("producto.*", "categoria.nombre_categoria")
                 ->join("categoria", "producto.id_categoria", "=", "categoria.id_categoria")
                 ->get();
+            $categorias = Categoria::all();
 
             return response()->json([
                 Config::get('constants.respuesta_json_ok') => true,
-                Config::get('constants.respuesta_json_data') => $productos
+                Config::get('constants.respuesta_json_data') => $productos,
+                Config::get('constants.respuesta_json_ok_categorias') =>  $categorias,
             ], 200);
         } catch (\Exception $ex) {
             return response()->json([
